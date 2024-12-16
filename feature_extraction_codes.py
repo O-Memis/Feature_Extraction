@@ -584,3 +584,58 @@ plt.xlabel("Feature Number")
 plt.title("Feature Vector")
 plt.plot(features)
 plt.show()
+
+
+
+#%% 5) Extra Methods
+
+
+# 1- STFT : Short-Time Fourier Transform
+
+"""
+This method involves series of FFT calculations from sliding portions of the signal.
+It is helpful to observe temporal frequency changes in the signal. 
+Plot of these series of FFTs is called the Spectrogram. There are many spectrogram types used in especially audio-engineering.
+In contrast of Scalogram, the Spectrogram has uniform resolution along time and frequency axes. 
+
+
+
+f_stft = frequency bins (indexes in Hz)
+
+t_stft = time segments, or columns of the spectrogram. Determined by the total signal length, the segment size (nperseg), and the overlap (noverlap)
+
+z_m =  Complex matrix which includes the resultant complex numbers with respect to columns(t_stft) and rows (f_stft). 
+Includes the magnitude and phase information.
+"""
+
+
+
+
+
+from scipy.signal import stft
+
+f_stft, t_stft, z_m = stft(signal, fs=fs, window='hann', nperseg=256, noverlap=128, nfft=512)
+
+
+
+# Plot the STFT 
+plt.figure(figsize=(10, 6))
+plt.pcolormesh(t_stft, f_stft, np.abs(z_m), shading='gouraud')
+plt.title('Magnitude Spectrogram')
+plt.ylabel('Frequency (Hz)')
+plt.xlabel('Time (s)')
+plt.colorbar(label='Magnitude')
+plt.tight_layout()
+plt.show()
+
+
+
+# Plot the phase. The phase is returned in radians and lies in the range -π and π
+plt.figure(figsize=(10, 6))
+plt.pcolormesh(t_stft, f_stft, np.angle(z_m), shading='gouraud', cmap='twilight')
+plt.title('Phase Spectrogram')
+plt.ylabel('Frequency (Hz)')
+plt.xlabel('Time (s)')
+plt.colorbar(label='Phase (radians)')
+plt.tight_layout()
+plt.show()
